@@ -42,7 +42,9 @@ export const useAuthStore = create<AuthStore>((set) => ({
   setUserType: (type) => {
     set({ userType: type });
   },
+  getUserDetail: async () => {
 
+  },
   checkAuth: async () => {
     try {
       const res = await user_management.getuser();

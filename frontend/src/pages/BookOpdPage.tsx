@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { axiosInstance } from "../lib/axios";
 import CircularProgress from "@mui/joy/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import hospital_management from "../utils/api_requests/hospital_management";
+import { z } from "zod/v4"; 
+
+import { useAuthStore } from "../store/useAuthStore";
+import { useHospitalStore } from "../store/useHospitalStore";
 
 interface Hospital {
   hospital_id: string;
@@ -16,6 +19,8 @@ interface Department {
 }
 
 export const BookOpdPage = () => {
+  const { authUser } = useAuthStore();
+  const {bookOpd} = useHospitalStore();
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,7 +30,8 @@ export const BookOpdPage = () => {
   const [selectedTime, setSelectedTime] = useState("");
 
   const [formData, setFormData] = useState({
-    name: "",
+    userId:'',
+    name:'',
     age: "",
     gender: "",
     hospitalId: "",
@@ -64,27 +70,30 @@ export const BookOpdPage = () => {
     const { name, value } = e.target;
 
     if (name === "hospitalId") {
-      console.log("value",value);
+      console.log("value", value);
       fetchDepartments(value);
       setFormData((prev) => ({ ...prev, departmentId: "" }));
     }
 
     setFormData({ ...formData, [name]: value });
   };
-  
+
   const handleSubmit = async () => {
+    console.log("sumit ")
     const payload = {
       ...formData,
       date: selectedDate,
       time: selectedTime,
     };
-    console.log("Payload:", payload); // Debugging line
-    try {
-      await axiosInstance.post("/opd-booking", payload);
-      alert("Booking successful!");
-    } catch (error) {
-      alert("Booking failed.");
-    }
+    payload.userId = authUser?.id;
+    payload.name = authUser?.name ? authUser.name: '';
+    bookOpd(payload);
+    // try {
+    //   await axiosInstance.post("/opd-booking", payload);
+    //   alert("Booking successful!");
+    // } catch (error:any) {
+    //   alert("Booking failed.");
+    // }
   };
 
   // Time slots every 5 minutes from 10:00 AM to 3:00 PM
@@ -106,7 +115,6 @@ export const BookOpdPage = () => {
       ) : (
         <div className="w-full min-h-screen bg-gray-900 text-white px-4 py-6 flex items-center  justify-start">
           <div className="flex flex-col md:flex-row w-full max-w-6xl">
-            {/* Form Section - 65% */}
             <div className="md:w-[to-70%] w-full backdrop-blur-lg bg-white/3 border border-gray-700 rounded-2xl shadow-lg p-6 sm:p-10">
               <div className="">
                 <button
@@ -130,7 +138,8 @@ export const BookOpdPage = () => {
                     type="text"
                     name="name"
                     placeholder="Patient Name"
-                    value={formData.name}
+                    value={authUser?.name ? authUser.name : formData.name}
+                    disabled={Boolean(authUser)}
                     onChange={handleChange}
                     className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
                   />
@@ -147,9 +156,11 @@ export const BookOpdPage = () => {
                     name="gender"
                     value={formData.gender}
                     onChange={handleChange}
-                    className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+                    className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-gray-600 focus:outline-none  focus:ring-blue-600 hover:cursor-pointer"
                   >
-                    <option value="">-- Select Gender --</option>
+                    <option value="" disabled>
+                      Select Gender
+                    </option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                     <option value="Other">Other</option>
@@ -164,9 +175,11 @@ export const BookOpdPage = () => {
                       name="hospitalId"
                       value={formData.hospitalId}
                       onChange={handleChange}
-                      className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+                      className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 transition hover:cursor-pointer"
                     >
-                      <option value="">-- Select Hospital --</option>
+                      <option value="" disabled>
+                        Select Hospital
+                      </option>
                       {hospitals.map((hosp) => (
                         <option key={hosp.hospital_id} value={hosp.hospital_id}>
                           {hosp.hospital_name}
@@ -185,9 +198,11 @@ export const BookOpdPage = () => {
                       value={formData.departmentId}
                       onChange={handleChange}
                       disabled={!formData.hospitalId}
-                      className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 transition disabled:opacity-50"
+                      className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 transition disabled:opacity-50 hover:cursor-pointer"
                     >
-                      <option value="">-- Select Department --</option>
+                      <option value="" disabled>
+                        Select Department
+                      </option>
                       {departments.map((dept) => (
                         <option key={dept._id} value={dept._id}>
                           {dept.dept_name}
