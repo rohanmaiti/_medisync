@@ -4,7 +4,8 @@ import {
   handleApplyForHospital,
   handleGetApprovedHospitals,
   getAllDepartments,
-  handleBookOpd
+  handleBookOpd,
+  getSlots
 } from "../controllers/hospital.controller.js";
 import {
   getDoctorviewslot,
@@ -13,11 +14,13 @@ import {
   ChangeVisibilityOfPatientHistory,
 } from "../controllers/doctor.controller.js";
 
-router.post("/applyForHospital", handleApplyForHospital);
 
 router.get("/getApprovedHospitals", handleGetApprovedHospitals);
 router.get("/departments/:hospitalId", getAllDepartments);
+router.get('/get-slots',getSlots);
 
+
+router.post("/applyForHospital", handleApplyForHospital);
 router.post("/book-opd", handleBookOpd);
 router.post("/doctor/slot", getDoctorviewslot);
 router.post("/doctor/visited", DoctorVisited);
