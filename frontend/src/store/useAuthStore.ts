@@ -6,7 +6,7 @@ import { Logintype } from "../types/auth.type";
 import user_management from "../utils/api_requests/user_management";
 
 interface AuthUser {
-  id: string;
+  _id: string;
   name: string;
   email: string;
 }

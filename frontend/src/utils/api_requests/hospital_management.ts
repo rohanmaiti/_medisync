@@ -18,7 +18,7 @@ const hospital_management = {
     },
     book_opd : (data:OpdPayloadType) => {
         return utils.request({
-            url:'',
+            url:'/hospital/book-opd',
             method:'POST',
             data:data
         })

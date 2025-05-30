@@ -1,17 +1,17 @@
 import mongoose from "mongoose";
 
 const slotSchema = new mongoose.Schema({
-  hospital: {
+  hospitalId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Hospital',   // Reference to Hospital Schema
     required: true
   },
-  patient: {
+  patientId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',    // Reference to User Schema
     required: true
   },
-  department: {
+  departmentId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Department', // Reference to Department Schema
     required: true

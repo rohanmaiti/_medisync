@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import CircularProgress from "@mui/joy/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import hospital_management from "../utils/api_requests/hospital_management";
-import { z } from "zod/v4"; 
-
 import { useAuthStore } from "../store/useAuthStore";
 import { useHospitalStore } from "../store/useHospitalStore";
+import toast from 'react-hot-toast';
 
 interface Hospital {
   hospital_id: string;
@@ -20,22 +19,22 @@ interface Department {
 
 export const BookOpdPage = () => {
   const { authUser } = useAuthStore();
-  const {bookOpd} = useHospitalStore();
+  const {bookOpd, isOpdBooking} = useHospitalStore();
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedTime, setSelectedTime] = useState<string>('');
 
   const [formData, setFormData] = useState({
     userId:'',
     name:'',
-    age: "",
-    gender: "",
-    hospitalId: "",
-    departmentId: "",
+    age: '',
+    gender: '',
+    hospitalId: '',
+    departmentId: '',
   });
 
   useEffect(() => {
@@ -68,13 +67,11 @@ export const BookOpdPage = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
     if (name === "hospitalId") {
       console.log("value", value);
       fetchDepartments(value);
       setFormData((prev) => ({ ...prev, departmentId: "" }));
     }
-
     setFormData({ ...formData, [name]: value });
   };
 
@@ -85,15 +82,14 @@ export const BookOpdPage = () => {
       date: selectedDate,
       time: selectedTime,
     };
-    payload.userId = authUser?.id;
+    if(!authUser){
+      return toast.error('Login to continue')
+    }
+    payload.userId = authUser._id;
+    console.log('payload', payload);
+    console.log(authUser);
     payload.name = authUser?.name ? authUser.name: '';
     bookOpd(payload);
-    // try {
-    //   await axiosInstance.post("/opd-booking", payload);
-    //   alert("Booking successful!");
-    // } catch (error:any) {
-    //   alert("Booking failed.");
-    // }
   };
 
   // Time slots every 5 minutes from 10:00 AM to 3:00 PM
@@ -255,9 +251,9 @@ export const BookOpdPage = () => {
               <div className="mt-10">
                 <button
                   onClick={handleSubmit}
-                  className="w-full bg-blue-700 hover:bg-blue-800 p-3 rounded-lg font-semibold transition"
+                  className="w-full bg-green-700 hover:bg-green-900 p-3 rounded-lg font-semibold hover:cursor-pointer transition"
                 >
-                  BOOK APPOINTMENT
+                 {isOpdBooking ? 'Booking...' : 'BOOK APPOINTMENT'} 
                 </button>
               </div>
             </div>

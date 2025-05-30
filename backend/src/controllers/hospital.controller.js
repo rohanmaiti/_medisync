@@ -35,3 +35,8 @@ export async function getAllDepartments(req,res){
       res.status(500).json({ message: 'Server error' });
     }
   };
+
+  export async function handleBookOpd(req,res){
+    const {userId, name, age, date, time, hospitalId, departmentId} = req.body;
+    
+  }

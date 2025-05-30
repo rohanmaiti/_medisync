@@ -1,7 +1,6 @@
 import { z } from "zod/v4";
 export  const OpdBookingPayloadSchema = z.object({
-      userId: z.string().min(1,"Login to continue"),
-      name:z.string().min(1,"Name require"),
+      name:z.string().min(1,"Login"),
       age:z.string().min(1,"Age require"),
       gender:z.string().min(1,"Gender require"),
       hospitalId: z.string().min(1,"Choose any hospital"),
@@ -16,5 +15,6 @@ export  const OpdBookingPayloadSchema = z.object({
       {
             message:"Date can't be in the past"
       }),
-      time:z.string().min(1,"Select a time slot")
+      time:z.string().min(1,"Select a time slot"),
+      userId: z.string("Login to continue")
 })

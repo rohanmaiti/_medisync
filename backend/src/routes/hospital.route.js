@@ -1,15 +1,27 @@
-import express from 'express';
+import express from "express";
 const router = express.Router();
-import {handleApplyForHospital, handleGetApprovedHospitals,getAllDepartments} from '../controllers/hospital.controller.js';
-import {getDoctorviewslot,DoctorVisited,fetchPatientHistory,ChangeVisibilityOfPatientHistory} from "../controllers/doctor.controller.js"
+import {
+  handleApplyForHospital,
+  handleGetApprovedHospitals,
+  getAllDepartments,
+  handleBookOpd
+} from "../controllers/hospital.controller.js";
+import {
+  getDoctorviewslot,
+  DoctorVisited,
+  fetchPatientHistory,
+  ChangeVisibilityOfPatientHistory,
+} from "../controllers/doctor.controller.js";
 
-router.post("/applyForHospital",handleApplyForHospital);
-router.get("/getApprovedHospitals",handleGetApprovedHospitals);
-router.get("/departments/:hospitalId",getAllDepartments)
+router.post("/applyForHospital", handleApplyForHospital);
 
-router.post("/doctor/slot",getDoctorviewslot)
-router.post("/doctor/visited",DoctorVisited);
-router.post("/patientHistory",fetchPatientHistory)
-router.post("/patient/changevisible",ChangeVisibilityOfPatientHistory)
+router.get("/getApprovedHospitals", handleGetApprovedHospitals);
+router.get("/departments/:hospitalId", getAllDepartments);
+
+router.post("/book-opd", handleBookOpd);
+router.post("/doctor/slot", getDoctorviewslot);
+router.post("/doctor/visited", DoctorVisited);
+router.post("/patientHistory", fetchPatientHistory);
+router.post("/patient/changevisible", ChangeVisibilityOfPatientHistory);
 
 export default router;
