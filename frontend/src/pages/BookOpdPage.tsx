@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import CircularProgress from "@mui/joy/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import hospital_management from "../utils/api_requests/hospital_management";
 import { useAuthStore } from "../store/useAuthStore";
 import { useHospitalStore } from "../store/useHospitalStore";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 interface Hospital {
   hospital_id: string;
@@ -19,27 +19,37 @@ interface Department {
 
 export const BookOpdPage = () => {
   const { authUser } = useAuthStore();
-  const {bookOpd, isOpdBooking} = useHospitalStore();
+  const { bookOpd, isOpdBooking, getSlots } = useHospitalStore();
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
+  const [bookedSlots, setBookedSlots] = useState<[]>([]);
   const navigate = useNavigate();
 
-  const [selectedDate, setSelectedDate] = useState<string>('');
-  const [selectedTime, setSelectedTime] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedTime, setSelectedTime] = useState<string>("");
 
   const [formData, setFormData] = useState({
-    userId:'',
-    name:'',
-    age: '',
-    gender: '',
-    hospitalId: '',
-    departmentId: '',
+    patientId: "",
+    name: "",
+    age: "",
+    gender: "",
+    hospitalId: "",
+    departmentId: "",
   });
 
   useEffect(() => {
     fetchHospitals();
   }, []);
+  useEffect(() => {
+    const fetchSlots = async () => {
+      if (selectedDate != "" && formData.departmentId != "") {
+        const slots: any = await getSlots(selectedDate, formData.departmentId);
+        setBookedSlots(slots);
+      }
+    };
+    fetchSlots();
+  }, [selectedDate, formData.departmentId]);
 
   const fetchHospitals = async () => {
     try {
@@ -55,7 +65,6 @@ export const BookOpdPage = () => {
   const fetchDepartments = async (hospitalId: string) => {
     try {
       const res = await hospital_management.get_departments(hospitalId);
-      console.log(res);
       setDepartments(res?.data);
     } catch (error) {
       console.error("Error fetching departments:", error);
@@ -68,27 +77,26 @@ export const BookOpdPage = () => {
   ) => {
     const { name, value } = e.target;
     if (name === "hospitalId") {
-      console.log("value", value);
       fetchDepartments(value);
       setFormData((prev) => ({ ...prev, departmentId: "" }));
     }
     setFormData({ ...formData, [name]: value });
   };
+  const isSlotBooked = (time: string) => {
+    return bookedSlots.find((slot: any) => slot.slot_time === time);
+  };
 
   const handleSubmit = async () => {
-    console.log("sumit ")
     const payload = {
       ...formData,
       date: selectedDate,
-      time: selectedTime,
+      slot_time: selectedTime,
     };
-    if(!authUser){
-      return toast.error('Login to continue')
+    if (!authUser) {
+      return toast.error("Login to continue");
     }
-    payload.userId = authUser._id;
-    console.log('payload', payload);
-    console.log(authUser);
-    payload.name = authUser?.name ? authUser.name: '';
+    payload.patientId = authUser._id;
+    payload.name = authUser?.name ? authUser.name : "";
     bookOpd(payload);
   };
 
@@ -228,20 +236,41 @@ export const BookOpdPage = () => {
                     <p className="text-sm text-gray-400 mb-2">
                       Select Time Slot
                     </p>
-                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-64 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
-                      {timeSlots.map((time) => (
-                        <button
-                          key={time}
-                          onClick={() => setSelectedTime(time)}
-                          className={`p-2 rounded-lg text-sm border border-gray-600 transition ${
-                            selectedTime === time
-                              ? "bg-blue-700 text-white"
-                              : "bg-[#2a2a2a] hover:bg-[#3a3a3a]"
-                          }`}
-                        >
-                          {time}
-                        </button>
-                      ))}
+                    <div
+                      aria-disabled={selectedDate == "" ? true : false}
+                      className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-64 overflow-y-auto p-1 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent"
+                    >
+                      {timeSlots.map((time) => {
+                        const booked = isSlotBooked(time);
+                        return (
+                          <button
+                            disabled={(selectedDate === "" || booked) ? true : booked}
+                            key={time}
+                            onClick={() => setSelectedTime(time)}
+                            className={`p-3 rounded-lg text-sm border border-gray-600 transition hover:cursor-pointer
+        ${selectedDate === "" ? "opacity-50 cursor-not-allowed" : ""}
+        ${selectedDate === "" ? "opacity-50 cursor-not-allowed" : ""}
+  ${
+    selectedTime === time
+      ? "bg-blue-600 text-white ring-2 ring-blue-400"
+      : formData.departmentId == "" || selectedDate == ""
+      ? "opacity-50 cursor-not-allowed bg-gray-500"
+      : booked
+      ? "bg-red-400 text-white"
+      : "bg-green-900 text-white hover:bg-green-800"
+  }
+
+        
+      `}
+                          >
+                            {formData.departmentId == ""
+                              ? "select dept"
+                              : selectedDate !== ""
+                              ? time
+                              : "select date"}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -251,9 +280,9 @@ export const BookOpdPage = () => {
               <div className="mt-10">
                 <button
                   onClick={handleSubmit}
-                  className="w-full bg-green-700 hover:bg-green-900 p-3 rounded-lg font-semibold hover:cursor-pointer transition"
+                  className="w-full bg-blue-900 hover:bg-blue-600 p-3 rounded-lg font-semibold hover:cursor-pointer transition"
                 >
-                 {isOpdBooking ? 'Booking...' : 'BOOK APPOINTMENT'} 
+                  {isOpdBooking ? "Booking..." : "BOOK APPOINTMENT"}
                 </button>
               </div>
             </div>

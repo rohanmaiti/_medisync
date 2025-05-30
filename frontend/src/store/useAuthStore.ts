@@ -26,8 +26,6 @@ interface AuthStore {
   login: (data: Logintype, navigate: NavigateFunction) => void;
   logout: () => Promise<void>;
   updateProfile: (data: any) => Promise<void>;
-  checkParkingStatus: (name: string) => Promise<{ active: boolean }>;
-  setParkingSlot: (name: string) => void;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -67,7 +65,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
         navigate("/");
       },2000);
     } catch (error: any) {
-      console.log(error);
+      console.log(error.message);
       toast.error(error.response?.data?.message || "Signup failed");
     } finally {
       set({ isSigningUp: false });
@@ -75,7 +73,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
 
   login: async (data, navigate) => {
-    console.log("login authStore",data);
     try {
       set({ isLoggingIng: true });
       const res = await user_management.login(data);
@@ -114,7 +111,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
   updateProfile: async (data) => {
     set({ isUpdatingProfile: true });
     try {
-      console.log(data);
       const res = await axiosInstance.put("/auth/update-profile", data);
       set({ authUser: res.data });
       toast.success("Profile updated successfully");
@@ -124,24 +120,5 @@ export const useAuthStore = create<AuthStore>((set) => ({
     } finally {
       set({ isUpdatingProfile: false });
     }
-  },
-
-  checkParkingStatus: async (name) => {
-    try {
-      const data = { name };
-      const res = await axiosInstance.post('/parking/status', data);
-      console.log("checkParkingStatus", res);
-      if (res.data.active) {
-        set({ hasParkingSlot: name });
-      }
-      return res.data;
-    } catch (error) {
-      console.error('Error checking parking status:', error);
-      return { active: false };
-    }
-  },
-
-  setParkingSlot: (name) => {
-    set({ hasParkingSlot: name });
-  },
+  }
 }));

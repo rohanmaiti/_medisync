@@ -15,6 +15,6 @@ export  const OpdBookingPayloadSchema = z.object({
       {
             message:"Date can't be in the past"
       }),
-      time:z.string().min(1,"Select a time slot"),
-      userId: z.string("Login to continue")
+      slot_time:z.string().min(1,"Select a time slot"),
+      patientId: z.string("Login to continue")
 })

@@ -1,8 +1,8 @@
 import {z} from "zod/v4"
 import { OpdBookingPayloadSchema } from "../../schemas/hospital.schema";
+import utils from "../utils";
 type OpdPayloadType = z.infer<typeof OpdBookingPayloadSchema>
 
-import utils from "../utils";
 const hospital_management = {
     get_approve_hospitals: ()=> {
         return utils.request({
@@ -20,7 +20,14 @@ const hospital_management = {
         return utils.request({
             url:'/hospital/book-opd',
             method:'POST',
-            data:data
+            payload:data
+        })
+    },
+    get_slots: (data:{date:string, departmentId:string}) => {
+        return utils.request({
+            url:'/hospital/get-slots',
+            method:'GET',
+            payload:data
         })
     }
 }
