@@ -1,23 +1,22 @@
 import mongoose from "mongoose";
-
 const slotSchema = new mongoose.Schema({
   hospitalId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Hospital',   // Reference to Hospital Schema
+    ref: 'Hospital',   
     required: true
   },
   patientId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',    // Reference to User Schema
+    ref: 'User',    
     required: true
   },
   departmentId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Department', // Reference to Department Schema
+    ref: 'Department', 
     required: true
   },
   date: {
-    type: String, // or Date type if you prefer
+    type: String,
     required: true
   },
   slot_time: {
