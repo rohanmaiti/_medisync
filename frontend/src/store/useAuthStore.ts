@@ -78,7 +78,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
     try {
       set({ isLoggingIng: true });
       const res = await user_management.login(data);
-      console.log("res",res);
       set({ authUser: res?.data });
       toast.success("Logged in successfully");
       if(res?.data.userType == "user")

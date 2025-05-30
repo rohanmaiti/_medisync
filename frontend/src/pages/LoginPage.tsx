@@ -30,7 +30,6 @@ export const LoginPage = () => {
   }, []);
   return (
     <div className="min-h-screen flex flex-col md:flex-row justify-center items-center gap-6 p-6 md:flex-row">
-      <Toaster  />
       <div className=" p-4  leading-13">
         <h1 className="text-4xl text-left font-extrabold leading-13 max-w-md">
           Welcome to MediSync <br /> Login to continue

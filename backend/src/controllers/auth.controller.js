@@ -13,7 +13,7 @@ async function signup(req, res) {
     if (!email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    const user = await User.findOne({ email:email });
+    const user = await User.findOne({ email: email });
     if (user) {
       return res.status(400).json({ message: "Email already exists" });
     }
@@ -41,33 +41,34 @@ async function signup(req, res) {
 
 // LOGIN
 async function login(req, res) {
+  console.log("login route");
+  const { email, password, userType } = req.body;
   try {
-    console.log("login route", req.body);
-    const { email, password, userType } = req.body;
-    if(userType == 'user'){
-      const user = await User.findOne({ email:email });
-      if(!user){
-        return res.status(400).json({ message: "Invalid Credentials" });
+    if (userType === "user") {
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ message: "Invalid credential" });
       }
-      let isPasswordMatched = await bcrypt.compare(password, user.password)
-      if(!isPasswordMatched){
-        return res.status(400).json({ message: "Invalid Credentials" });  
+      if (! await bcrypt.compare(password, user.password)) {
+        return res.status(400).json({ message: "Invalid credential" });
       }
       generateToken(user._id, res);
-      const {password , ...rest} = user;
-      return res.status(200).json(...rest);
-    }
-    else{
-      const employee = await Employee.findOne({ email: email });
-      if(!employee || await bcrypt.compare(password, employee.password)){
-        return res.status(400).json({ message: "Invalid Credentials" });
+      delete user.password;
+      res.status(200).json(user);
+    } else {
+      const emp = await Employee.findOne({ email });
+      if (!emp) {
+        return res.status(400).json({ message: "Invalid credential" });
       }
-      generateToken(employee._id, res);
-      const {password, ...rest} = employee;
-      return res.status(200).json(...rest);
+      if (! await bcrypt.compare(password, emp.password)) {
+        return res.status(400).json({ message: "Invalid credential" });
+      }
+      generateToken(emp._id, res);
+      delete emp.password;
+      res.status(200).json(emp);
     }
-  } catch (err) {
-    return res.status(500).json({ message: "Server Error " + err.message });
+  } catch (error) {
+    res.json(500).json({ message: error.message });
   }
 }
 

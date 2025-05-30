@@ -27,7 +27,6 @@ export const SignupPage = () => {
   }
   return (
     <div className="min-h-screen flex flex-col md:flex-row justify-center items-center gap-6 p-6 md:flex-row" >
-      <Toaster position="top-right"/>
       <div className=" p-4  leading-13" >
         <h1 className="text-4xl text-left font-extrabold leading-13 max-w-md" >Enter the details to register...</h1>
         <h2>Already have account? <Link className='text-green-600' to="/login">Login</Link> </h2>

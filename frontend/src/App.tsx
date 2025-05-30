@@ -18,7 +18,7 @@ function App() {
   const {checkAuth} = useAuthStore();
   useEffect(()=>{
     checkAuth();
-  },[checkAuth])
+  },[])
 
   return (
     <div>
