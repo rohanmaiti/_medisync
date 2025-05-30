@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../lib/axios";
 import CircularProgress from "@mui/joy/CircularProgress";
 import { useNavigate } from "react-router-dom";
+import hospital_management from "../utils/api_requests/hospital_management";
 
 interface Hospital {
   hospital_id: string;
@@ -37,8 +38,8 @@ export const BookOpdPage = () => {
 
   const fetchHospitals = async () => {
     try {
-      const res = await axiosInstance.get("/hospital/getApprovedHospitals");
-      setHospitals(res.data);
+      const res = await hospital_management.get_approve_hospitals();
+      setHospitals(res?.data);
     } catch (error) {
       console.error("Error fetching hospitals:", error);
     } finally {
@@ -48,16 +49,29 @@ export const BookOpdPage = () => {
 
   const fetchDepartments = async (hospitalId: string) => {
     try {
-      const res = await axiosInstance.get(
-        `/departments?hospitalId=${hospitalId}`
-      );
-      setDepartments(res.data);
+      const res = await hospital_management.get_departments(hospitalId);
+      console.log(res);
+      setDepartments(res?.data);
     } catch (error) {
       console.error("Error fetching departments:", error);
       setDepartments([]);
     }
   };
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    if (name === "hospitalId") {
+      console.log("value",value);
+      fetchDepartments(value);
+      setFormData((prev) => ({ ...prev, departmentId: "" }));
+    }
+
+    setFormData({ ...formData, [name]: value });
+  };
+  
   const handleSubmit = async () => {
     const payload = {
       ...formData,
@@ -71,19 +85,6 @@ export const BookOpdPage = () => {
     } catch (error) {
       alert("Booking failed.");
     }
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-
-    if (name === "hospitalId") {
-      fetchDepartments(value);
-      setFormData((prev) => ({ ...prev, departmentId: "" }));
-    }
-
-    setFormData({ ...formData, [name]: value });
   };
 
   // Time slots every 5 minutes from 10:00 AM to 3:00 PM
@@ -189,7 +190,7 @@ export const BookOpdPage = () => {
                       <option value="">-- Select Department --</option>
                       {departments.map((dept) => (
                         <option key={dept._id} value={dept._id}>
-                          {dept.name}
+                          {dept.dept_name}
                         </option>
                       ))}
                     </select>

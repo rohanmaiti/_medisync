@@ -27,10 +27,8 @@ export async function getAllDepartments(req,res){
         console.log("id is"+hospitalId)
       if (!hospitalId) {
         return res.status(400).json({ message: 'hospitalId is required' });
-      }
-  
+      }  
       const departments = await Department.find({ hospital: hospitalId });
-      console.log(departments);
       res.status(200).json(departments);
     } catch (error) {
       console.error('Error fetching departments:', error);

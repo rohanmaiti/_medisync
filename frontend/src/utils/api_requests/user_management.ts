@@ -7,6 +7,12 @@ const user_management = {
             method:'POST',
             payload:data
         })
+    },
+    getuser: () => {
+        return utils.request({
+            url:'/auth/check',
+            method:'GET'
+        })
     }
 }
 
