@@ -1,13 +1,14 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
-import { NavigateFunction } from "react-router-dom";
+import type { NavigateFunction } from "react-router-dom";
+import { Logintype } from "../types/auth.type";
+import user_management from "../utils/api_requests/user_management";
 
 interface AuthUser {
   id: string;
   name: string;
   email: string;
-  // add more fields based on your actual user object
 }
 
 interface AuthStore {
@@ -22,7 +23,7 @@ interface AuthStore {
   setUserType: (type: string) => void;
   checkAuth: () => Promise<void>;
   signup: (data: any, navigate: NavigateFunction) => Promise<void>;
-  login: (data: any, navigate: NavigateFunction) => Promise<void>;
+  login: (data: Logintype, navigate: NavigateFunction) => void;
   logout: () => Promise<void>;
   updateProfile: (data: any) => Promise<void>;
   checkParkingStatus: (name: string) => Promise<{ active: boolean }>;
@@ -73,32 +74,27 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
 
   login: async (data, navigate) => {
-    console.log("login authStore");
+    console.log("login authStore",data);
     try {
       set({ isLoggingIng: true });
-      const res = await axiosInstance.post("/auth/login", data);
-      console.log("res",res.data);
-      set({ authUser: res.data });
+      const res = await user_management.login(data);
+      console.log("res",res);
+      set({ authUser: res?.data });
       toast.success("Logged in successfully");
-      // redicrect as per user type 
-      // for user type "user" redirect to "/"
-      setTimeout(()=>{
-      if(res.data.userType == "user")
+      if(res?.data.userType == "user")
       navigate("/");
-      else if(res.data.userType == "doctor")
+      else if(res?.data.userType == "doctor")
       navigate("/doctor/dashboard");
-      else if(res.data.userType == "inventory manager")
+      else if(res?.data.userType == "inventory manager")
       navigate("/inventory/dashboard");
-      else if(res.data.userType == "receptionist")
+      else if(res?.data.userType == "receptionist")
       navigate("/receptionist/dashboard");
-      else if(res.data.userType == "hospital admin")  
+      else if(res?.data.userType == "hospital admin")  
       navigate("/hospitaladmin/dashboard");
-      else if(res.data.userType == "super_admin")
+      else if(res?.data.userType == "super_admin")
       navigate("/superadmindashboard");
-      },1000);
-     
       
-    } catch (error: any) {
+    } catch (error:any) {
       toast.error(error.response?.data?.message || "Login failed");
     } finally {
       set({ isLoggingIng: false });

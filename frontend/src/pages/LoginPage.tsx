@@ -1,4 +1,4 @@
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { Toaster } from "react-hot-toast";
@@ -13,7 +13,6 @@ export const LoginPage = () => {
   
   const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // alert(emailRef.current?.value + " " + passwrodRef.current?.value);
     const data = {
       email: emailRef.current?.value,
       password: passwrodRef.current?.value,

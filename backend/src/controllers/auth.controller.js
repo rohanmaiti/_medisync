@@ -45,9 +45,7 @@ async function login(req, res) {
     console.log("login route", req.body);
     const { email, password, userType } = req.body;
     if(userType == 'user'){
-      console.log("userType");
       const user = await User.findOne({ email:email });
-      console.log("user", user);
       if(!user){
         return res.status(400).json({ message: "Invalid Credentials" });
       }
@@ -56,8 +54,8 @@ async function login(req, res) {
         return res.status(400).json({ message: "Invalid Credentials" });  
       }
       generateToken(user._id, res);
-      console.log("user_id", user._id);
-      return res.status(200).json(user);
+      const {password , ...rest} = user;
+      return res.status(200).json(...rest);
     }
     else{
       const employee = await Employee.findOne({ email: email });
@@ -65,7 +63,8 @@ async function login(req, res) {
         return res.status(400).json({ message: "Invalid Credentials" });
       }
       generateToken(employee._id, res);
-      return res.status(200).json(employee);
+      const {password, ...rest} = employee;
+      return res.status(200).json(...rest);
     }
   } catch (err) {
     return res.status(500).json({ message: "Server Error " + err.message });
