@@ -8,8 +8,8 @@ type HospitalStore = {
   isOpdBooking: boolean;
   hospitals: [];
   setHospitals: () => void;
-  bookOpd: (payload: any) => void;
-  getSlots: (date:string,departmentId:string) => Promise<AxiosResponse<any, any> | never[] | undefined>;
+  bookOpd: (payload: any, resetPayload:any) => void;
+  getSlots: (date:string,departmentId:string, hospitalId:string) => Promise<AxiosResponse<any, any> | never[] | undefined>;
 };
 export const useHospitalStore = create<HospitalStore>((set) => ({
   isOpdBooking: false,
@@ -17,16 +17,18 @@ export const useHospitalStore = create<HospitalStore>((set) => ({
   setHospitals: () => {
     set({ hospitals: [] });
   },
-  bookOpd: async (payload) => {
-    
+  bookOpd: async (payload, resetPayload) => {
     const result = OpdBookingPayloadSchema.safeParse(payload);
     if (!result.success) {
-      return toast.error(result.error.issues[0].message);
+      return toast(result.error.issues[0].message,{
+        icon:'⚠️'
+      });
     }
     set({ isOpdBooking: true });
     try {
       await hospital_management.book_opd(payload);
       toast.success("Slot booked");
+      resetPayload();
     } catch (error: any) {
       return toast.error(error?.response.data.message);
     }
@@ -35,10 +37,10 @@ export const useHospitalStore = create<HospitalStore>((set) => ({
     }
   },
 
-  getSlots:  async (date,departmentId) => {
+  getSlots:  async (date,departmentId,hospitalId) => {
     try {
       const data = {
-        date,departmentId
+        date,departmentId,hospitalId
       }
       const res = await hospital_management.get_slots(data);
       return res?.data;

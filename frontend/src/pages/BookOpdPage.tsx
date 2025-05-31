@@ -44,12 +44,16 @@ export const BookOpdPage = () => {
   useEffect(() => {
     const fetchSlots = async () => {
       if (selectedDate != "" && formData.departmentId != "") {
-        const slots: any = await getSlots(selectedDate, formData.departmentId);
+        const slots: any = await getSlots(
+          selectedDate,
+          formData.departmentId,
+          formData.hospitalId
+        );
         setBookedSlots(slots);
       }
     };
     fetchSlots();
-  }, [selectedDate, formData.departmentId]);
+  }, [selectedDate, formData.departmentId, formData.hospitalId]);
 
   const fetchHospitals = async () => {
     try {
@@ -85,6 +89,11 @@ export const BookOpdPage = () => {
   const isSlotBooked = (time: string) => {
     return bookedSlots.find((slot: any) => slot.slot_time === time);
   };
+  const isYourSlot = (time: string) => {
+    return bookedSlots.find(
+      (slot: any) => slot.time == time && slot.patientId == authUser?._id
+    );
+  };
 
   const handleSubmit = async () => {
     const payload = {
@@ -93,11 +102,26 @@ export const BookOpdPage = () => {
       slot_time: selectedTime,
     };
     if (!authUser) {
-      return toast.error("Login to continue");
+      return toast("Please Login to continue ‼️", {
+        icon: "⚠️",
+      });
     }
     payload.patientId = authUser._id;
     payload.name = authUser?.name ? authUser.name : "";
-    bookOpd(payload);
+    bookOpd(payload, resetPayload);
+  };
+
+  const resetPayload = () => {
+    setFormData({
+      patientId: "",
+      name: "",
+      age: "",
+      gender: "",
+      hospitalId: "",
+      departmentId: "",
+    });
+    setSelectedDate("");
+    setSelectedTime("");
   };
 
   // Time slots every 5 minutes from 10:00 AM to 3:00 PM
@@ -145,7 +169,9 @@ export const BookOpdPage = () => {
                     value={authUser?.name ? authUser.name : formData.name}
                     disabled={Boolean(authUser)}
                     onChange={handleChange}
-                    className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+                    className={`w-full p-3 rounded-lg bg-[#2a2a2a] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 transition ${
+                      authUser.name ? "text-gray-400" : "text-white"
+                    } `}
                   />
                   <input
                     type="text"
@@ -242,9 +268,12 @@ export const BookOpdPage = () => {
                     >
                       {timeSlots.map((time) => {
                         const booked = isSlotBooked(time);
+                        const yourbooked = isYourSlot(time);
                         return (
                           <button
-                            disabled={(selectedDate === "" || booked) ? true : booked}
+                            disabled={
+                              selectedDate === "" || booked ? true : booked
+                            }
                             key={time}
                             onClick={() => setSelectedTime(time)}
                             className={`p-3 rounded-lg text-sm border border-gray-600 transition hover:cursor-pointer
@@ -253,8 +282,10 @@ export const BookOpdPage = () => {
   ${
     selectedTime === time
       ? "bg-blue-600 text-white ring-2 ring-blue-400"
-      : formData.departmentId == "" || selectedDate == ""
+      : formData.departmentId === "" || selectedDate === ""
       ? "opacity-50 cursor-not-allowed bg-gray-500"
+      : yourbooked
+      ? "bg-yellow-300"
       : booked
       ? "bg-red-400 text-white"
       : "bg-green-900 text-white hover:bg-green-800"

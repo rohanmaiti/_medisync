@@ -9,8 +9,9 @@ import {
   Avatar,
   Sheet,
 } from "@mui/joy";
+import Person from '@mui/icons-material/Person';
 import { useNavigate } from "react-router-dom";
-import {  useState } from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -19,7 +20,7 @@ import { useAuthStore } from "../store/useAuthStore";
 export const Navbar = () => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const {authUser, userType, isCheckingAuth} = useAuthStore();
+  const { authUser, userType, isCheckingAuth } = useAuthStore();
 
   const handleLoginUser = (typeOfUser: string) => {
     navigate("/login", { state: { userType: typeOfUser } });
@@ -76,9 +77,9 @@ export const Navbar = () => {
         href="emergency-service-page"
         underline="none"
         variant="solid"
-        color="danger"
         level="body-lg"
-        sx={{ "&:hover": { backgroundColor: "#d32f2f", color: "#eeeeee" } }}
+        color="danger"
+        sx={{ "&:hover": { backgroundColor: "#ff0000", color: "#eeeeee" } }}
       >
         Emergency
       </Link>
@@ -134,9 +135,15 @@ export const Navbar = () => {
                   slots={{ root: IconButton }}
                   slotProps={{ root: { variant: "plain", color: "primary" } }}
                 >
-                  <Avatar alt="Profile" size="md" />
+                  {/* <Avatar alt="Profile" size="md" /> */}
+                  <Person/>
                 </MenuButton>
-                <Menu placement="bottom-end">
+                <Menu
+                  placement="bottom-end"
+                  sx={{
+                    bgcolor: "#b5cef5",
+                  }}
+                >
                   <MenuItem onClick={() => navigate("/profile")}>
                     Profile
                   </MenuItem>
@@ -153,22 +160,40 @@ export const Navbar = () => {
                 <MenuButton variant="outlined" color="primary">
                   Login
                 </MenuButton>
-                <Menu placement="bottom-end">
-                  <MenuItem onClick={() => handleLoginUser("user")}>
+                <Menu
+                  placement="bottom-end"
+                  sx={{
+                    bgcolor: "#b5cef5",
+                  }}
+                >
+                  <MenuItem
+                    sx={{ color: "#16191c", borderBottom: "1px solid #86a3d1" }}
+                    onClick={() => handleLoginUser("user")}
+                  >
                     User
                   </MenuItem>
-                  <MenuItem onClick={() => handleLoginUser("doctor")}>
+                  <MenuItem
+                    sx={{ color: "#16191c", borderBottom: "1px solid #86a3d1" }}
+                    onClick={() => handleLoginUser("doctor")}
+                  >
                     Doctor
                   </MenuItem>
                   <MenuItem
+                    sx={{ color: "#16191c", borderBottom: "1px solid #86a3d1" }}
                     onClick={() => handleLoginUser("inventory manager")}
                   >
                     Inventory Manager
                   </MenuItem>
-                  <MenuItem onClick={() => handleLoginUser("receptionist")}>
+                  <MenuItem
+                    sx={{ color: "#16191c", borderBottom: "1px solid #86a3d1" }}
+                    onClick={() => handleLoginUser("receptionist")}
+                  >
                     Reception
                   </MenuItem>
-                  <MenuItem onClick={() => handleLoginUser("hospital admin")}>
+                  <MenuItem
+                    sx={{ color: "#16191c" }}
+                    onClick={() => handleLoginUser("hospital admin")}
+                  >
                     Hospital Admin
                   </MenuItem>
                 </Menu>
@@ -214,17 +239,34 @@ export const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <Link onClick={() => handleLoginUser("user")}>
+                  <Link
+                    sx={{ borderBottom: "1px solid", padding: "4px" }}
+                    onClick={() => handleLoginUser("user")}
+                  >
                     Login as User
                   </Link>
-                  <Link onClick={() => handleLoginUser("doctor")}>Doctor</Link>
-                  <Link onClick={() => handleLoginUser("inventory manager")}>
+                  <Link
+                    sx={{ borderBottom: "1px solid", padding: "4px" }}
+                    onClick={() => handleLoginUser("doctor")}
+                  >
+                    Doctor
+                  </Link>
+                  <Link
+                    sx={{ borderBottom: "1px solid", padding: "4px" }}
+                    onClick={() => handleLoginUser("inventory manager")}
+                  >
                     Inventory Manager
                   </Link>
-                  <Link onClick={() => handleLoginUser("receptionist")}>
+                  <Link
+                    sx={{ borderBottom: "1px solid", padding: "4px" }}
+                    onClick={() => handleLoginUser("receptionist")}
+                  >
                     Reception
                   </Link>
-                  <Link onClick={() => handleLoginUser("hospital admin")}>
+                  <Link
+                    sx={{ padding: "4px" }}
+                    onClick={() => handleLoginUser("hospital admin")}
+                  >
                     Hospital Admin
                   </Link>
                 </>
