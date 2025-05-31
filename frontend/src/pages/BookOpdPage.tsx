@@ -170,7 +170,7 @@ export const BookOpdPage = () => {
                     disabled={Boolean(authUser)}
                     onChange={handleChange}
                     className={`w-full p-3 rounded-lg bg-[#2a2a2a] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 transition ${
-                      authUser.name ? "text-gray-400" : "text-white"
+                      authUser?.name ? "text-gray-400" : "text-white"
                     } `}
                   />
                   <input

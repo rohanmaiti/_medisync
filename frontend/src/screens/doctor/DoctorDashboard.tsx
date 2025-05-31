@@ -17,7 +17,7 @@ import {
   CheckCircle2,
   ChevronDown,
 } from "lucide-react";
-import { DoctorDashHeader } from "./atoms/DoctorDashHeader";
+import { DoctorDashHeader } from "./components/DoctorDashHeader";
 
 // Type definitions
 interface Medicine {

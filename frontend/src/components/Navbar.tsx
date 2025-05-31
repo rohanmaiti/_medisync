@@ -33,32 +33,35 @@ export const Navbar = () => {
   const NavLinks = () => (
     <>
       <Link
-        href="#home"
+        href="/#home"
         underline="none"
         variant="plain"
         color="primary"
         level="body-lg"
         sx={{ "&:hover": { backgroundColor: "#6200ea", color: "white" } }}
+        onClick={()=>setMobileMenuOpen(false)}
       >
         Home
       </Link>
       <Link
-        href="#services"
+        href="/#services"
         underline="none"
         variant="plain"
         color="primary"
         level="body-lg"
         sx={{ "&:hover": { backgroundColor: "#6200ea", color: "white" } }}
+        onClick={()=>setMobileMenuOpen(false)}
       >
         Services
       </Link>
       <Link
-        href="#about"
+        href="/#about"
         underline="none"
         variant="plain"
         color="primary"
         level="body-lg"
         sx={{ "&:hover": { backgroundColor: "#6200ea", color: "white" } }}
+        onClick={()=>setMobileMenuOpen(false)}
       >
         About
       </Link>
@@ -67,7 +70,7 @@ export const Navbar = () => {
         variant="plain"
         color="primary"
         level="body-lg"
-        onClick={() => navigate("/book-opd-form")}
+        onClick={() => {setMobileMenuOpen(false); return navigate("/book-opd-form")}}
         sx={{ "&:hover": { backgroundColor: "#6200ea", color: "white" } }}
       >
         Book OPD
@@ -79,6 +82,7 @@ export const Navbar = () => {
         level="body-lg"
         color="danger"
         sx={{ "&:hover": { backgroundColor: "#ff0000", color: "#eeeeee" } }}
+        onClick={()=>setMobileMenuOpen(false)}
       >
         Emergency
       </Link>
@@ -240,31 +244,31 @@ export const Navbar = () => {
                 <>
                   <Link
                     sx={{ borderBottom: "1px solid", padding: "4px" }}
-                    onClick={() => handleLoginUser("user")}
+                    onClick={() => { setMobileMenuOpen(false); return handleLoginUser("user")}}
                   >
                     Login as User
                   </Link>
                   <Link
                     sx={{ borderBottom: "1px solid", padding: "4px" }}
-                    onClick={() => handleLoginUser("doctor")}
+                    onClick={() => {setMobileMenuOpen(false); return handleLoginUser("doctor")}}
                   >
                     Doctor
                   </Link>
                   <Link
                     sx={{ borderBottom: "1px solid", padding: "4px" }}
-                    onClick={() => handleLoginUser("inventory manager")}
+                    onClick={() => {setMobileMenuOpen(false); return handleLoginUser("inventory manager")}}
                   >
                     Inventory Manager
                   </Link>
                   <Link
                     sx={{ borderBottom: "1px solid", padding: "4px" }}
-                    onClick={() => handleLoginUser("receptionist")}
+                    onClick={() => {setMobileMenuOpen(false); return handleLoginUser("receptionist")}}
                   >
                     Reception
                   </Link>
                   <Link
                     sx={{ padding: "4px" }}
-                    onClick={() => handleLoginUser("hospital admin")}
+                    onClick={() => {setMobileMenuOpen(false); return handleLoginUser("hospital admin")}}
                   >
                     Hospital Admin
                   </Link>

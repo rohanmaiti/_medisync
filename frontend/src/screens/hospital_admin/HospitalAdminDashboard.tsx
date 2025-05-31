@@ -1,10 +1,7 @@
-import React, { useState } from "react";
-import {Hospital,Menu,Home,LogOut,X,} from "lucide-react";
-import { Toaster } from "react-hot-toast";
+import React from "react";
 
-
-import { HospitalAdminHome } from "./atoms/HospitalAdminHome";
-import { HospitaladminHeader } from "./atoms/HospitaladminHeader";
+import { HospitalAdminHome } from "./components/HospitalAdminHome";
+import { HospitaladminHeader } from "./components/HospitaladminHeader";
 
 
 const HospitalAdminDashboard: React.FC = () => {
