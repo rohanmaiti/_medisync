@@ -5,6 +5,8 @@ import hospital_management from "../utils/api_requests/hospital_management";
 import { useAuthStore } from "../store/useAuthStore";
 import { useHospitalStore } from "../store/useHospitalStore";
 import toast from "react-hot-toast";
+import Select from "@mui/joy/Select";
+import Option from "@mui/joy/Option";
 
 interface Hospital {
   hospital_id: string;
@@ -182,19 +184,20 @@ export const BookOpdPage = () => {
                     className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
                   />
 
-                  <select
-                    name="gender"
+                  <Select
                     value={formData.gender}
-                    onChange={handleChange}
-                    className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-gray-600 focus:outline-none  focus:ring-blue-600 hover:cursor-pointer"
+                    onChange={(_, value) =>
+                      setFormData({ ...formData, gender: value || "" })
+                    }
+                    
+                    size="lg"
+                    sx={{ width: "100%",bgcolor:'#2a2a2a', color:'#99a1af', border:'1px solid #4a5565' }}
                   >
-                    <option value="" disabled>
-                      Select Gender
-                    </option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
+                    <Option sx={{ width: "100%",bgcolor:'#2a2a2a', color:'#99a1af', border:'1px solid #4a5565'  }}  value="" disabled >Select Gender</Option>
+                    <Option value="Male">Male</Option>
+                    <Option value="Female">Female</Option>
+                    <Option value="Other">Other</Option>
+                  </Select>
 
                   <div>
                     <label className="block mb-1 text-sm text-gray-400">
