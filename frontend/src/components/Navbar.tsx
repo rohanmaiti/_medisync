@@ -6,7 +6,6 @@ import {
   MenuItem,
   Dropdown,
   IconButton,
-  Avatar,
   Sheet,
 } from "@mui/joy";
 import Person from '@mui/icons-material/Person';
