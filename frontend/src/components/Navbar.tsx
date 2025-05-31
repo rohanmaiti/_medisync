@@ -8,7 +8,8 @@ import {
   IconButton,
   Sheet,
 } from "@mui/joy";
-import Person from '@mui/icons-material/Person';
+import { ClickAwayListener } from "@mui/material";
+import Person from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -29,6 +30,9 @@ export const Navbar = () => {
     console.log("Logging out...");
     navigate("/");
   };
+  const handleClickAway = () => {
+    setMobileMenuOpen(false);
+  };
 
   const NavLinks = () => (
     <>
@@ -39,7 +43,7 @@ export const Navbar = () => {
         color="primary"
         level="body-lg"
         sx={{ "&:hover": { backgroundColor: "#6200ea", color: "white" } }}
-        onClick={()=>setMobileMenuOpen(false)}
+        onClick={() => setMobileMenuOpen(false)}
       >
         Home
       </Link>
@@ -50,7 +54,7 @@ export const Navbar = () => {
         color="primary"
         level="body-lg"
         sx={{ "&:hover": { backgroundColor: "#6200ea", color: "white" } }}
-        onClick={()=>setMobileMenuOpen(false)}
+        onClick={() => setMobileMenuOpen(false)}
       >
         Services
       </Link>
@@ -61,7 +65,7 @@ export const Navbar = () => {
         color="primary"
         level="body-lg"
         sx={{ "&:hover": { backgroundColor: "#6200ea", color: "white" } }}
-        onClick={()=>setMobileMenuOpen(false)}
+        onClick={() => setMobileMenuOpen(false)}
       >
         About
       </Link>
@@ -70,7 +74,10 @@ export const Navbar = () => {
         variant="plain"
         color="primary"
         level="body-lg"
-        onClick={() => {setMobileMenuOpen(false); return navigate("/book-opd-form")}}
+        onClick={() => {
+          setMobileMenuOpen(false);
+          return navigate("/book-opd-form");
+        }}
         sx={{ "&:hover": { backgroundColor: "#6200ea", color: "white" } }}
       >
         Book OPD
@@ -82,7 +89,7 @@ export const Navbar = () => {
         level="body-lg"
         color="danger"
         sx={{ "&:hover": { backgroundColor: "#ff0000", color: "#eeeeee" } }}
-        onClick={()=>setMobileMenuOpen(false)}
+        onClick={() => setMobileMenuOpen(false)}
       >
         Emergency
       </Link>
@@ -139,7 +146,7 @@ export const Navbar = () => {
                   slotProps={{ root: { variant: "plain", color: "primary" } }}
                 >
                   {/* <Avatar alt="Profile" size="md" /> */}
-                  <Person/>
+                  <Person />
                 </MenuButton>
                 <Menu
                   placement="bottom-end"
@@ -205,77 +212,101 @@ export const Navbar = () => {
           </div>
 
           {/* Mobile menu toggle */}
-          <div className="lg:hidden">
-            <IconButton
-              variant="plain"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
-            </IconButton>
-          </div>
 
-          {/* Mobile menu dropdown */}
-          {mobileMenuOpen && (
-            <Sheet
-              sx={{
-                position: "absolute",
-                top: "100%",
-                left: 0,
-                right: 0,
-                bgcolor: "background.level1",
-                zIndex: 50,
-                p: 2,
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
-              }}
-              className="lg:hidden"
-            >
-              <NavLinks />
-              {authUser ? (
-                <>
-                  <Link onClick={() => navigate("/profile")}>Profile</Link>
-                  <Link onClick={() => navigate("/dashboard")}>Dashboard</Link>
-                  <Link onClick={handleLogout} sx={{ color: "red" }}>
-                    Logout
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link
-                    sx={{ borderBottom: "1px solid", padding: "4px" }}
-                    onClick={() => { setMobileMenuOpen(false); return handleLoginUser("user")}}
-                  >
-                    Login as User
-                  </Link>
-                  <Link
-                    sx={{ borderBottom: "1px solid", padding: "4px" }}
-                    onClick={() => {setMobileMenuOpen(false); return handleLoginUser("doctor")}}
-                  >
-                    Doctor
-                  </Link>
-                  <Link
-                    sx={{ borderBottom: "1px solid", padding: "4px" }}
-                    onClick={() => {setMobileMenuOpen(false); return handleLoginUser("inventory manager")}}
-                  >
-                    Inventory Manager
-                  </Link>
-                  <Link
-                    sx={{ borderBottom: "1px solid", padding: "4px" }}
-                    onClick={() => {setMobileMenuOpen(false); return handleLoginUser("receptionist")}}
-                  >
-                    Reception
-                  </Link>
-                  <Link
-                    sx={{ padding: "4px" }}
-                    onClick={() => {setMobileMenuOpen(false); return handleLoginUser("hospital admin")}}
-                  >
-                    Hospital Admin
-                  </Link>
-                </>
+          <ClickAwayListener onClickAway={handleClickAway}>
+            <div>
+              <div className="lg:hidden">
+                <IconButton
+                  variant="plain"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                >
+                  {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+                </IconButton>
+              </div>
+
+              {/* Mobile menu dropdown */}
+              {mobileMenuOpen && (
+                <Sheet
+                  sx={{
+                    position: "absolute",
+                    top: "100%",
+                    left: 0,
+                    right: 0,
+                    bgcolor: "#a2d1f5",
+                    zIndex: 50,
+                    p: 3,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 2,
+                    borderBottomLeftRadius: "5px",
+                    borderBottomRightRadius: "5px",
+                  }}
+                  className="lg:hidden"
+                >
+                  <NavLinks />
+                  {authUser ? (
+                    <>
+                      <Link onClick={() => navigate("/profile")}>Profile</Link>
+                      <Link onClick={() => navigate("/dashboard")}>
+                        Dashboard
+                      </Link>
+                      <Link onClick={handleLogout} sx={{ color: "red" }}>
+                        Logout
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        sx={{ borderBottom: "1px solid", padding: "4px" }}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          return handleLoginUser("user");
+                        }}
+                      >
+                        Login as User
+                      </Link>
+                      <Link
+                        sx={{ borderBottom: "1px solid", padding: "4px" }}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          return handleLoginUser("doctor");
+                        }}
+                      >
+                        Doctor
+                      </Link>
+                      <Link
+                        sx={{ borderBottom: "1px solid", padding: "4px" }}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          return handleLoginUser("inventory manager");
+                        }}
+                      >
+                        Inventory Manager
+                      </Link>
+                      <Link
+                        sx={{ borderBottom: "1px solid", padding: "4px" }}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          return handleLoginUser("receptionist");
+                        }}
+                      >
+                        Reception
+                      </Link>
+                      <Link
+                        sx={{ padding: "4px" }}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          return handleLoginUser("hospital admin");
+                        }}
+                      >
+                        Hospital Admin
+                      </Link>
+                    </>
+                  )}
+                </Sheet>
               )}
-            </Sheet>
-          )}
+            </div>
+          </ClickAwayListener>
         </div>
       )}
     </>
