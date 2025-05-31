@@ -23,7 +23,7 @@ function App() {
   return (
     <div>
        <div className="fixed w-full ">
-        <Navbar />
+       <Navbar />
       </div>
       <Routes>
         <Route index element={<LandingPage />} />
@@ -32,6 +32,9 @@ function App() {
           <Route path="signup" element={<SignupPage />} />
         </Route>
 
+        <Route>
+          <Route path= '/profile' element={<div className="w-screen h-screen flex justify-center items-center" ><h1>Profile page</h1></div>} />
+        </Route>
         <Route
           path="/registration-form"
           element={<HospitalRegistrationForm />}
@@ -43,7 +46,9 @@ function App() {
         />
         <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
         <Route path="/patient/history" element={<PatientHistoryPage />} />
+        <Route path="*" element={<div className="w-screen h-screen flex justify-center items-center text-4xl"><h1>404 Page Not found</h1></div>} />
       </Routes>
+
       <Toaster />
     </div>
   );
