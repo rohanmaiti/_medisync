@@ -39,14 +39,15 @@ export async function getAllDepartments(req, res) {
 
 export async function handleBookOpd(req, res) {
   console.log("handling booking opd");
-  const { userId, name, age, date, time, hospitalId, departmentId } = req.body;
-  let slot = await Slot.findOne({ userId, departmentId, date });
+  const { userId, name, age, date, slot_time, hospitalId, departmentId } = req.body;
+  let slot = await Slot.findOne({ userId, departmentId, date, hospitalId });
   if (slot) {
     return res.status(400).json({
       message: "Can't book more than one Appointment in a department",
     });
   }
-  slot = await Slot.findOne({ userId, date, time });
+  slot = await Slot.findOne({ userId, date, slot_time , hospitalId });
+  console.log(slot);
   if (slot) {
     return res
       .status(400)
@@ -63,9 +64,9 @@ export async function handleBookOpd(req, res) {
 
 export async function getSlots(req, res) {
   console.log("getting slots...");
-  const { date, departmentId } = req.query;
+  const { date, departmentId, hospitalId} = req.query;
   try {
-    const slots = await Slot.find({ date, departmentId });
+    const slots = await Slot.find({ date, departmentId, hospitalId });
     return res.status(200).json(slots);
   } catch (error) {
     console.log(error.message);
