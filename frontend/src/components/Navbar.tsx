@@ -1,5 +1,4 @@
 import {
-  Input,
   Link,
   Menu,
   MenuButton,
@@ -12,7 +11,6 @@ import { ClickAwayListener } from "@mui/material";
 import Person from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { useAuthStore } from "../store/useAuthStore";
@@ -20,7 +18,7 @@ import { useAuthStore } from "../store/useAuthStore";
 export const Navbar = () => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { authUser, userType, isCheckingAuth } = useAuthStore();
+  const { authUser, isCheckingAuth } = useAuthStore();
 
   const handleLoginUser = (typeOfUser: string) => {
     navigate("/login", { state: { userType: typeOfUser } });
@@ -32,6 +30,22 @@ export const Navbar = () => {
   };
   const handleClickAway = () => {
     setMobileMenuOpen(false);
+  };
+
+  const hanlde_dashboard_click = ()=> {
+    const userType = authUser?.userType;
+    switch (userType){
+      case 'hospital_admin' : navigate('/hospitaladmin/dashboard')
+    }
+  }
+
+  const get_dashboard_button = () => {
+        return <button className="bg-gray-700 py-2 px-4 rounded-4xl hover:cursor-pointer text-gray-400 
+        transition delay-20 duration-300 ease-in-out hover:-translate-x-1 hover:scale-105 hover:bg-indigo-500 hover:text-white
+        " 
+        onClick={hanlde_dashboard_click}
+        > Your Dashboard</button>
+    
   };
 
   const NavLinks = () => (
@@ -93,52 +107,35 @@ export const Navbar = () => {
       >
         Emergency
       </Link>
-      {authUser && userType === "super_admin" && (
-        <NavLink to="/admindashboard">Admin dashboard</NavLink>
-      )}
+      {authUser ? get_dashboard_button() : ""}
     </>
   );
 
   return (
-    <>
+    <div className="w-screen">
       {isCheckingAuth ? (
         <div className="flex justify-center items-center h-screen">
           <img src="loading.gif" alt="Loading..." width={100} />
         </div>
       ) : (
-        <div className="bg-zinc-900 p-3 flex items-center justify-between">
+        <div className="bg-zinc-900 p-3 flex  justify-between items-center">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center flex-none pr-20">
             <img
               src="logo.png"
               alt="medisync logo"
               width={90}
               className="p-2 hover:cursor-pointer"
             />
-            {/* Search input (hidden on small) */}
-            <div className="hidden md:flex items-center gap-10">
-              <Input
-                placeholder="Search Hospitals"
-                variant="outlined"
-                color="neutral"
-                sx={{
-                  border: "1px solid grey",
-                  backgroundColor: "#1f2937",
-                  color: "white",
-                  borderRadius: "8px",
-                  width: "20rem",
-                }}
-              />
-            </div>
           </div>
 
           {/* Desktop Nav Links */}
-          <div className="hidden lg:flex gap-10 items-center">
+          <div className="hidden lg:flex gap-10 items-center flex-1 justify-start">
             <NavLinks />
           </div>
 
           {/* Right side (Login/Profile) */}
-          <div className="hidden lg:block px-5">
+          <div className="hidden lg:block px-5 flex-none">
             {authUser ? (
               <Dropdown>
                 <MenuButton
@@ -309,6 +306,6 @@ export const Navbar = () => {
           </ClickAwayListener>
         </div>
       )}
-    </>
+    </div>
   );
 };

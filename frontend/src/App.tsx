@@ -5,13 +5,12 @@ import { LoginPage } from "./pages/LoginPage";
 import { SignupPage } from "./pages/SIgnupPage";
 import { HospitalRegistrationForm } from "./pages/HospitalRegistrationPage";
 import { BookOpdPage } from "./pages/BookOpdPage";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
 import HospitalAdminDashboard from "./screens/hospital_admin/HospitalAdminDashboard";
 import PatientHistoryPage from "./pages/PatientHistory";
 import DoctorDashboard from "./screens/doctor/DoctorDashboard";
-import { Navbar } from "./components/Navbar";
 // import DocDash from './userDashboards/hospitalAdmin/doctor/DoctorDashboard'
 
 function App() {
@@ -22,31 +21,44 @@ function App() {
 
   return (
     <div>
-       <div className="fixed w-full ">
-       <Navbar />
-      </div>
       <Routes>
         <Route index element={<LandingPage />} />
-        <Route element={!authUser ? <Outlet/> : <Navigate to='/'/>  } >
+        <Route element={!authUser ? <Outlet /> : <Navigate to="/" />}>
           <Route path="login" element={<LoginPage />} />
           <Route path="signup" element={<SignupPage />} />
         </Route>
 
-        <Route>
-          <Route path= '/profile' element={<div className="w-screen h-screen flex justify-center items-center" ><h1>Profile page</h1></div>} />
+        <Route element={authUser ? <Outlet /> : <PleaseLogin />}>
+          <Route
+            path="/profile"
+            element={
+              <div className="w-screen h-screen flex justify-center items-center">
+                <h1>Profile page</h1>
+              </div>
+            }
+          />
+          <Route
+            path="/hospitaladmin/dashboard"
+            element={<HospitalAdminDashboard />}
+          />
+          <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
+          <Route path="/patient/history" element={<PatientHistoryPage />} />
         </Route>
+
         <Route
           path="/registration-form"
           element={<HospitalRegistrationForm />}
         />
         <Route path="/book-opd-form" element={<BookOpdPage />} />
+
         <Route
-          path="/hospitaladmin/dashboard"
-          element={<HospitalAdminDashboard />}
+          path="*"
+          element={
+            <div className="w-screen h-screen flex justify-center items-center text-4xl">
+              <h1>404 Page Not found</h1>
+            </div>
+          }
         />
-        <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
-        <Route path="/patient/history" element={<PatientHistoryPage />} />
-        <Route path="*" element={<div className="w-screen h-screen flex justify-center items-center text-4xl"><h1>404 Page Not found</h1></div>} />
       </Routes>
 
       <Toaster />
@@ -55,3 +67,10 @@ function App() {
 }
 
 export default App;
+
+function PleaseLogin() {
+  useEffect(() => {
+    toast("Please Login to continue");
+  }, []);
+  return <Navigate to="/login" />;
+}

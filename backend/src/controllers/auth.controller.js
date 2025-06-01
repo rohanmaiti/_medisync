@@ -7,7 +7,6 @@ import generateToken from "../lib/utils.js";
 
 // SIGNUP
 async function signup(req, res) {
-  console.log("signup route", req.body);
   try {
     const { name, email, password } = req.body;
     if (!email || !password) {
@@ -41,7 +40,6 @@ async function signup(req, res) {
 
 // LOGIN
 async function login(req, res) {
-  console.log("login route");
   const { email, password, userType } = req.body;
   try {
     if (userType === "user") {
@@ -156,7 +154,6 @@ async function sendPasswordResetEmail(req, res) {
 
 // CHECK AUTH
 function checkAuth(req, res) {
-  // console.log("checkauth route");
   try {
     res.status(200).json(req.user);
   } catch (error) {

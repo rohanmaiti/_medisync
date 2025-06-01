@@ -6,6 +6,9 @@ import { ServiceSection } from "./sections/ServiceSection";
 export const LandingPage = () => {
   return (
     <div className="h-screen overflow-y-auto scroll-smooth">
+       <div className="fixed w-full ">
+       <Navbar />
+      </div>
       <section
         id="home"
         className="min-h-screen flex items-center justify-center bg-slate-600 pt-20 text-black"

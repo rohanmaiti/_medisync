@@ -9,6 +9,7 @@ interface AuthUser {
   _id: string;
   name: string;
   email: string;
+  userType:string
 }
 
 interface AuthStore {
@@ -76,6 +77,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     try {
       set({ isLoggingIng: true });
       const res = await user_management.login(data);
+      console.log(res?.data);
       set({ authUser: res?.data });
       toast.success("Logged in successfully");
       if(res?.data.userType == "user")
@@ -115,7 +117,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
       set({ authUser: res.data });
       toast.success("Profile updated successfully");
     } catch (error: any) {
-      console.log("error in update profile:", error);
+      console.log("error in update profile", error);
       toast.error("Error in updating profile");
     } finally {
       set({ isUpdatingProfile: false });
