@@ -32,20 +32,31 @@ export const Navbar = () => {
     setMobileMenuOpen(false);
   };
 
-  const hanlde_dashboard_click = ()=> {
+  const hanlde_dashboard_click = () => {
     const userType = authUser?.userType;
-    switch (userType){
-      case 'hospital_admin' : navigate('/hospitaladmin/dashboard')
+    switch (userType) {
+      case "hospital_admin":
+        navigate("/hospitaladmin/dashboard");
+        break;
+      case "inventory_manager": navigate("/hospitaladmin/dashboard"); break;
+      case "receptionist": navigate("/hospitaladmin/dashboard"); break;
+      case "doctor": navigate("/hospitaladmin/dashboard"); break;
+      default : navigate('/');break;
     }
-  }
+  };
 
   const get_dashboard_button = () => {
-        return <button className="bg-gray-700 py-2 px-4 rounded-4xl hover:cursor-pointer text-gray-400 
+    return (
+      <button
+        className="bg-gray-700 py-2 px-4 rounded-4xl hover:cursor-pointer text-gray-400 
         transition delay-20 duration-300 ease-in-out hover:-translate-x-1 hover:scale-105 hover:bg-indigo-500 hover:text-white
-        " 
+        "
         onClick={hanlde_dashboard_click}
-        > Your Dashboard</button>
-    
+      >
+        {" "}
+        Your Dashboard
+      </button>
+    );
   };
 
   const NavLinks = () => (
@@ -107,7 +118,7 @@ export const Navbar = () => {
       >
         Emergency
       </Link>
-      {authUser ? get_dashboard_button() : ""}
+      {authUser && authUser.userType != 'user' ? get_dashboard_button() : ""}
     </>
   );
 
