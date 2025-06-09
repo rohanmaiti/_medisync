@@ -38,10 +38,18 @@ export const Navbar = () => {
       case "hospital_admin":
         navigate("/hospitaladmin/dashboard");
         break;
-      case "inventory_manager": navigate("/hospitaladmin/dashboard"); break;
-      case "receptionist": navigate("/hospitaladmin/dashboard"); break;
-      case "doctor": navigate("/hospitaladmin/dashboard"); break;
-      default : navigate('/');break;
+      case "inventory_manager":
+        navigate("/hospitaladmin/dashboard");
+        break;
+      case "receptionist":
+        navigate("/hospitaladmin/dashboard");
+        break;
+      case "doctor":
+        navigate("/hospitaladmin/dashboard");
+        break;
+      default:
+        navigate("/");
+        break;
     }
   };
 
@@ -94,31 +102,36 @@ export const Navbar = () => {
       >
         About
       </Link>
-      <Link
-        underline="none"
-        variant="plain"
-        color="primary"
-        level="body-lg"
-        onClick={() => {
-          setMobileMenuOpen(false);
-          return navigate("/book-opd-form");
-        }}
-        sx={{ "&:hover": { backgroundColor: "#6200ea", color: "white" } }}
-      >
-        Book OPD
-      </Link>
-      <Link
-        href="emergency-service-page"
-        underline="none"
-        variant="solid"
-        level="body-lg"
-        color="danger"
-        sx={{ "&:hover": { backgroundColor: "#ff0000", color: "#eeeeee" } }}
-        onClick={() => setMobileMenuOpen(false)}
-      >
-        Emergency
-      </Link>
-      {authUser && authUser.userType != 'user' ? get_dashboard_button() : ""}
+      {authUser && authUser.userType === "user" && (
+        <>
+          <Link
+            underline="none"
+            variant="plain"
+            color="primary"
+            level="body-lg"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              return navigate("/book-opd-form");
+            }}
+            sx={{ "&:hover": { backgroundColor: "#6200ea", color: "white" } }}
+          >
+            Book OPD
+          </Link>
+          <Link
+            href="emergency-service-page"
+            underline="none"
+            variant="solid"
+            level="body-lg"
+            color="danger"
+            sx={{ "&:hover": { backgroundColor: "#ff0000", color: "#eeeeee" } }}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Emergency
+          </Link>
+        </>
+      )}
+
+      {authUser && authUser.userType != "user" ? get_dashboard_button() : ""}
     </>
   );
 
