@@ -1,5 +1,6 @@
 import { Home, Hospital, LogOut, Menu, X } from 'lucide-react'
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 
 // Define types
 type NavLinkProps = {
@@ -25,7 +26,6 @@ export const HospitaladminHeader = () => {
             <div className="flex items-center"> 
               <nav className="hidden md:flex space-x-8 mr-8">
                 <NavLink active>
-                  <Home size={18} />
                   Home
                 </NavLink>
                 <NavLink>About</NavLink>
@@ -47,7 +47,6 @@ export const HospitaladminHeader = () => {
             <div className="absolute right-0 top-16 w-48 z-50 bg-gray-800 border border-gray-700 shadow-lg rounded-md overflow-hidden">
               <div className="md:hidden py-2 px-4">
                 <NavLink active>
-                  <Home size={18} />
                   Home
                 </NavLink>
                 <NavLink>About</NavLink>
@@ -66,13 +65,13 @@ export const HospitaladminHeader = () => {
 
 const NavLink: React.FC<NavLinkProps> = ({ children, active }) => {
     return (
-      <a
-        href="#"
+      <Link
+        to={`${children}`}
         className={`flex items-center space-x-1 px-3 py-2 rounded-md transition-colors hover:text-emerald-400 ${
           active ? "text-emerald-400 font-medium" : "text-gray-300"
         }`}
       >
         {children}
-      </a>
+      </Link>
     );
   };

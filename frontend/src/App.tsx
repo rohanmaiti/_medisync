@@ -11,6 +11,8 @@ import { useEffect } from "react";
 import HospitalAdminDashboard from "./screens/hospital_admin/HospitalAdminDashboard";
 import PatientHistoryPage from "./pages/PatientHistory";
 import DoctorDashboard from "./screens/doctor/DoctorDashboard";
+import { HospitalAdminHome } from "./screens/hospital_admin/components/HospitalAdminHome";
+import { HospitaladminHeader } from "./screens/hospital_admin/components/HospitaladminHeader";
 // import DocDash from './userDashboards/hospitalAdmin/doctor/DoctorDashboard'
 
 function App() {
@@ -30,27 +32,32 @@ function App() {
 
         <Route element={authUser ? <Outlet /> : <PleaseLogin />}>
           <Route
-            path="/profile"
-            element={
-              <div className="w-screen h-screen flex justify-center items-center">
-                <h1>Profile page</h1>
-              </div>
-            }
-          />
-          <Route
             path="/hospitaladmin/dashboard"
             element={<HospitalAdminDashboard />}
-          />
-          <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
-          <Route path="/patient/history" element={<PatientHistoryPage />} />
+          >
+            <Route path='home'index element={<HospitalAdminHome/>} />
+            <Route path="About"  element={<h1>About page</h1>} />
+            <Route path="*" element={<h1>Not valid endpoint</h1>} />
+          <Route />
+          </Route>
         </Route>
+        
 
         <Route
           path="/registration-form"
           element={<HospitalRegistrationForm />}
         />
         <Route path="/book-opd-form" element={<BookOpdPage />} />
-
+        <Route
+          path="/profile"
+          element={
+            <div className="w-screen h-screen flex justify-center items-center">
+              <h1>Profile page</h1>
+            </div>
+          }
+        />
+        <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
+        <Route path="/patient/history" element={<PatientHistoryPage />} />
         <Route
           path="*"
           element={
