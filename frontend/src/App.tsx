@@ -41,7 +41,6 @@ function App() {
           <Route />
           </Route>
         </Route>
-        
 
         <Route
           path="/registration-form"
