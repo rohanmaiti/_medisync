@@ -12,8 +12,6 @@ import HospitalAdminDashboard from "./screens/hospital_admin/HospitalAdminDashbo
 import PatientHistoryPage from "./pages/PatientHistory";
 import DoctorDashboard from "./screens/doctor/DoctorDashboard";
 import { HospitalAdminHome } from "./screens/hospital_admin/components/HospitalAdminHome";
-import { HospitaladminHeader } from "./screens/hospital_admin/components/HospitaladminHeader";
-// import DocDash from './userDashboards/hospitalAdmin/doctor/DoctorDashboard'
 
 function App() {
   const { checkAuth, authUser } = useAuthStore();
@@ -35,8 +33,9 @@ function App() {
             path="/hospitaladmin/dashboard"
             element={<HospitalAdminDashboard />}
           >
-            <Route path='home'index element={<HospitalAdminHome/>} />
+            <Route  index element={<HospitalAdminHome/>} />
             <Route path="About"  element={<h1>About page</h1>} />
+            <Route path="contact"  element={<h1>Contact page</h1>} />
             <Route path="*" element={<h1>Not valid endpoint</h1>} />
           <Route />
           </Route>
