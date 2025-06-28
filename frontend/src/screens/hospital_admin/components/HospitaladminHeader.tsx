@@ -1,10 +1,9 @@
-import {  Hospital, LogOut, Menu, X } from "lucide-react";
-import  { useState } from "react";
+import { Hospital, LogOut, Menu, X } from "lucide-react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import  './styles.css';
+import "./styles.css";
+import {AppBar} from '@mui/material'
 // Define types
-
-
 
 export const HospitaladminHeader = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -13,7 +12,15 @@ export const HospitaladminHeader = () => {
     setMenuOpen(!menuOpen);
   };
   return (
-    <header className="bg-gray-800/80 p-4 border-b border-emerald-500/30 relative">
+     <AppBar position="static">
+
+     </AppBar>
+  );
+};
+
+/**
+ * 
+ * <header className="bg-green-800/80 p-4 border-b border-emerald-500/30 sticky top-0 z-50">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Hospital className="text-emerald-400" size={24} />
@@ -23,7 +30,9 @@ export const HospitaladminHeader = () => {
         </div>
         <div className="flex items-center">
           <nav className="hidden md:flex space-x-8 mr-8">
-            <NavLink to="/hospitaladmin/dashboard" end>Home</NavLink>
+            <NavLink to="/hospitaladmin/dashboard" end>
+              Home
+            </NavLink>
             <NavLink to="about">About</NavLink>
             <NavLink to="contact">Contact</NavLink>
             <NavLink to="employess">Employees</NavLink>
@@ -38,11 +47,13 @@ export const HospitaladminHeader = () => {
         </div>
       </div>
 
-      {/* Dropdown Menu */}
+   
       {menuOpen && (
         <div className="absolute right-0 top-16 w-48 z-50 bg-gray-800 border border-gray-700 shadow-lg rounded-md overflow-hidden">
           <div className="md:hidden py-2 px-4">
-            <NavLink to="/hospitaladmin/dashboard" end>Home</NavLink>
+            <NavLink to="/hospitaladmin/dashboard" end>
+              Home
+            </NavLink>
             <NavLink to="about">About</NavLink>
             <NavLink to="contact">Contact</NavLink>
             <NavLink to="employess">Employees</NavLink>
@@ -54,5 +65,4 @@ export const HospitaladminHeader = () => {
         </div>
       )}
     </header>
-  );
-};
+ */

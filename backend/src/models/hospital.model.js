@@ -49,5 +49,5 @@ const hospitalSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-const Hospital = mongoose.model("hospitals", hospitalSchema);
+const Hospital = mongoose.model("Hospitals", hospitalSchema);
 export default Hospital;

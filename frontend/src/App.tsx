@@ -12,6 +12,7 @@ import HospitalAdminDashboard from "./screens/hospital_admin/HospitalAdminDashbo
 import PatientHistoryPage from "./pages/PatientHistory";
 import DoctorDashboard from "./screens/doctor/DoctorDashboard";
 import { HospitalAdminHome } from "./screens/hospital_admin/components/HospitalAdminHome";
+import HospitalAdminPage from "./screens/hospital_admin/HospitalAdminPage";
 
 function App() {
   const { checkAuth, authUser } = useAuthStore();
@@ -31,7 +32,7 @@ function App() {
         <Route element={authUser ? <Outlet /> : <PleaseLogin />}>
           <Route
             path="/hospitaladmin/dashboard"
-            element={<HospitalAdminDashboard />}
+            element={<HospitalAdminPage />}
           >
             <Route  index element={<HospitalAdminHome/>} />
             <Route path="About"  element={<h1>About page</h1>} />
