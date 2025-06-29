@@ -9,7 +9,7 @@ export function getAllDepartments() {
 }
 
 export async function addEmployee(req, res) {
-  const { emp_name, emp_type, emp_email, emp_department_id, emp_phone_number } =
+  const { name, userType, email, departmentId, phoneNumber } =
     req.body;
   // check if emp already exists or not
   const emp = Employees.findOne({ email: emp_email });
@@ -21,13 +21,13 @@ export async function addEmployee(req, res) {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
   const newEmp = new Employees({
-    name: emp_name,
-    userType: emp_type,
-    email: emp_email,
-    departmentId: emp_department_id,
-    phone_number: emp_phone_number,
+    name: name,
+    userType: userType,
+    email: email, 
+    departmentId: departmentId,
+    phoneNumber: phoneNumber,
     password: hashedPassword,
-    hospital_id: req.user.hospitalId
+    hospitalId: req.user.hospitalId
   });
   await newEmp.save();
 const empWithHospital = await Employees.findById(newEmp._id).populate('hospital_id');

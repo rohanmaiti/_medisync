@@ -40,6 +40,7 @@ async function signup(req, res) {
 
 // LOGIN
 async function login(req, res) {
+  console.log(req.body)
   const { email, password, userType } = req.body;
   try {
     if (userType === "user") {
@@ -59,7 +60,7 @@ async function login(req, res) {
         return res.status(400).json({ message: "Invalid credential" });
       }
       if (! await bcrypt.compare(password, emp.password)) {
-        return res.status(400).json({ message: "Invalid credential" });
+        return res.status(400).json({ message: "Password is wrong" });
       }
       generateToken(emp._id, res);
       delete emp.password;
@@ -160,6 +161,8 @@ function checkAuth(req, res) {
     res.status(500).json({ message: "Server Error " + error.message });
   }
 }
+
+
 
 export {
   signup,

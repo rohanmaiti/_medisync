@@ -12,7 +12,7 @@ const EmployeeSchema = new mongoose.Schema({
     lowercase: true,
     trim: true,
   },
-  phone_number: {
+  phoneNumber: {
     type: String,
     required: true,
     trim: true,
@@ -30,7 +30,7 @@ const EmployeeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  hospital_id:{
+  hospitalId:{
     type:  mongoose.Schema.Types.ObjectId,
     ref: 'Hospitals',
     require: true

@@ -23,7 +23,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173","*"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
@@ -33,3 +33,6 @@ import hospitalRoutes from "./routes/hospital.route.js";
 import authRoutes from "./routes/auth.route.js";
 app.use("/api/hospital", hospitalRoutes);
 app.use("/api/auth", authRoutes);
+
+
+
